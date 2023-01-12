@@ -1,25 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import { sculptureList } from './data';
+import { useEffect } from 'react';
 
-function App() {
+function Demo() {
+  const [index, setIndex] = useState(0);
+  const [showMore, setShowMore] = useState(false);
+
+  //
+  useEffect(() => {
+    console.log(index);
+  }, [index]); // როდესაც [] არის ცარიელი useEffect გაეშვება მხოლოდ ერთხელ პირველჯერზე.
+  // [index] ამ დროს useEffect გაეშვება პირველ ჯერზე და მხოლოდ მაშინ როდესაც index state შეიცვლება.
+  // თუ [] არ უწერია მაშინ useEffect გაეშვება ყოველ რენდერინგის დროს
+
+  function handleNextClick() {
+    setIndex(index + 1);
+  }
+
+  function handleUndoClick() {
+    setIndex(index - 1);
+  }
+  function handleMoreClick() {
+    setShowMore(!showMore);
+  }
+
+  let sculpture = sculptureList[index];
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <button onClick={handleNextClick}>next</button>
+      <button onClick={handleUndoClick}>undo</button>
+
+      <h2>
+        <i>{sculpture.name} </i>
+        by {sculpture.artist}
+      </h2>
+
+      <h3>
+        ({index + 1} of {sculptureList.length})
+      </h3>
+
+      <img src={sculpture.url} alt={sculpture.alt} />
+
+      <button onClick={handleMoreClick}>
+        {showMore ? 'Hide' : 'show'} details
+      </button>
+
+      {showMore && <p>{sculpture.description}</p>}
+    </>
   );
 }
 
-export default App;
+export default Demo;
